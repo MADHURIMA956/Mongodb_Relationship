@@ -35,31 +35,30 @@ const User = mongoose.model('users' , userSchema);  // collection name , schema 
 
 // post mongooes 
 
-const postSchema = new mongoose.Schema({
-    
-    title : { type : String , required : true},
-    body : { type : String , required : true },
-    user_id : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'users',
-        required : true,
+const postSchema = new mongoose.Schema(
+    {
+      title: { type: String, required: true },
+      body: { type: String, required: true },
+      user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: true,
+      },
+      tag_ids: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "tags",
+          required: true,
+        },
+      ],
     },
-    tag_ids : [
-             { 
-                type : mongoose.Schema.Types.ObjectId,
-                ref : 'tags',
-                required : true,
-            }
-        ]
- } , 
-{ 
-    versionKey : false,
-    timestamps : true,
-    
-}
-); 
-
-const Post = mongoose.model( 'posts' , postSchema );
+    {
+      versionKey: false,
+      timestamps: true,
+    }
+  );
+  
+  const Post = mongoose.model("posts", postSchema);
 
  // comment Mongoose  => Post and comments are one to one relationship 
 
@@ -241,17 +240,16 @@ app.delete('/tags/:id' , async( req ,res ) => {
 // --------------------------- POST CRUD  --------------------------
 
 
-app.post('/posts'  , async( req, res) => {
-
-    try{
-
-        const posts = await Post.create(req.body);
-        return res.status(201).send(posts);
-
-    }catch(e){
-        return res.status(500).json( { message : e.message , status : 'Failed' });
+app.post("/posts", async (req, res) => {
+    try {
+      const post = await Post.create(req.body);
+  
+      return res.status(201).send(post);
+    } catch (e) {
+      return res.status(500).json({ message: e.message, status: "Failed" });
     }
-});
+  });
+  
 
 app.get('/posts' , async( req,res )=> {
 
